@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MY Personal Shopper | Estil i Imatge</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+
+    <nav class="navbar">
+        <div class="logo">MY Personal Shopper</div>
+        <ul class="nav-links">
+            <li><a href="#inici">Inici</a></li>
+            <li><a href="#serveis">Serveis</a></li>
+            <li><a href="#sobre-mi">Sobre mi</a></li>
+            <li><a href="#contacte" class="btn-nav">Reservar</a></li>
+        </ul>
+        <div class="hamburger">
+            <span class="bar"></span>
+            <span class="bar"></span>
+            <span class="bar"></span>
+        </div>
+    </nav>
+
+
+    <header id="inici" class="hero">
+        <div class="hero-content">
+            <h1>Descobreix la teva millor versió</h1>
+            <p>Assessoria d'imatge i experiències de compra personalitzades per potenciar el teu estil únic.</p>
+            <a href="#serveis" class="btn-primary">Veure Serveis</a>
+        </div>
+    </header>
+   
+   
+
+
+    <section id="serveis" class="services">
+        <h2>Els Meus Serveis</h2>
+        <div class="services-grid">
+            <div class="service-card">
+                <h3>Ruta de Compres</h3>
+                <p>T'acompanyo a les millors botigues per trobar les peces que realment et senten bé i s'ajusten al teu pressupost.</p>
+            </div>
+            <div class="service-card">
+                <h3>Detox d'Armari</h3>
+                <p>Analitzem el teu guarda-roba, eliminem el que no necessites i creem nous looks amb el que ja tens.</p>
+            </div>
+            <div class="service-card">
+                <h3>Estilisme d'Events</h3>
+                <p>Tens un casament o una reunió important? Trobarem el look perfecte perquè brillis amb llum pròpia.</p>
+            </div>
+        </div>
+    </section>
+
+
+    <section id="contacte" class="contact">
+        <h2>Comencem el canvi?</h2>
+        <p>Escriu-me i parlem dels teus objectius d'estil.</p>
+        <form id="contactForm">
+            <input type="text" placeholder="El teu nom" required>
+            <input type="email" placeholder="El teu email" required>
+            <textarea placeholder="Com et puc ajudar?" rows="4" required></textarea>
+            <button type="submit" class="btn-primary">Enviar Missatge</button>
+        </form>
+    </section>
+
+
+    <footer>
+        <p>&copy; 2025 MY Personal Shopper. Tots els drets reservats.</p>
+    </footer>
+
+
+    <script src="script.js"></script>
+</body>
+</html>
