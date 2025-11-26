@@ -3,76 +3,341 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>MY Personal Shopper | Estil i Imatge</title>
-    <link rel="stylesheet" href="style.css">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+    <title>My Personal Shopper | El teu estil a casa</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- VARIABLES D'ESTIL (Colors i Fonts) --- */
+        :root {
+            --color-bg: #ffffff;
+            --color-text: #1a1a1a;
+            --color-accent: #D4AF37; /* Daurat elegant */
+            --color-secondary: #f4f4f4; /* Gris molt suau */
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        /* --- RESET BÀSIC --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            line-height: 1.6;
+        }
+
+        a { text-decoration: none; color: inherit; transition: 0.3s; }
+        ul { list-style: none; }
+
+        /* --- HEADER & NAV --- */
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 5%;
+            position: fixed;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            z-index: 1000;
+            border-bottom: 1px solid #eee;
+        }
+
+        .logo {
+            font-family: var(--font-title);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        nav ul {
+            display: flex;
+            gap: 30px;
+        }
+
+        nav a {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        nav a:hover {
+            color: var(--color-accent);
+        }
+
+        .btn-login {
+            border: 1px solid var(--color-text);
+            padding: 8px 20px;
+            border-radius: 0; /* Quadrat, estil editorial */
+        }
+
+        .btn-login:hover {
+            background: var(--color-text);
+            color: #fff;
+        }
+
+        /* --- HERO SECTION (Portada) --- */
+        .hero {
+            height: 90vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            background-color: var(--color-secondary);
+            /* Aquí hi aniria una imatge de fons editorial */
+            background-image: linear-gradient(rgba(255,255,255,0.3), rgba(255,255,255,0.3)), url('https://images.unsplash.com/photo-1483985988355-763728e1935b?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            padding: 0 20px;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            background: rgba(255, 255, 255, 0.8);
+            padding: 50px;
+            border: 1px solid #000;
+        }
+
+        .hero h1 {
+            font-family: var(--font-title);
+            font-size: 3.5rem;
+            margin-bottom: 20px;
+            color: var(--color-text);
+        }
+
+        .hero p {
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+            color: #555;
+        }
+
+        .btn-primary {
+            display: inline-block;
+            background-color: var(--color-text);
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        /* --- COM FUNCIONA (Steps) --- */
+        .steps {
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .section-title {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin-bottom: 60px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title::after {
+            content: '';
+            display: block;
+            width: 50%;
+            height: 2px;
+            background: var(--color-accent);
+            margin: 10px auto 0;
+        }
+
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+        }
+
+        .step-card {
+            padding: 20px;
+        }
+
+        .step-number {
+            font-family: var(--font-title);
+            font-size: 4rem;
+            color: #e0e0e0;
+            line-height: 1;
+            margin-bottom: 10px;
+        }
+
+        .step-card h3 {
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* --- PREU I CTA --- */
+        .pricing {
+            background-color: var(--color-text);
+            color: #fff;
+            padding: 80px 10%;
+            text-align: center;
+        }
+
+        .pricing h2 {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #fff;
+        }
+
+        .price-tag {
+            font-size: 1.2rem;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+
+        .btn-secondary {
+            background-color: transparent;
+            border: 2px solid #fff;
+            color: #fff;
+            padding: 15px 40px;
+            font-size: 1rem;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .btn-secondary:hover {
+            background-color: #fff;
+            color: #000;
+        }
+
+        /* --- FOOTER --- */
+        footer {
+            background-color: #f9f9f9;
+            padding: 40px 5%;
+            text-align: center;
+            font-size: 0.9rem;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        .footer-links {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero h1 { font-size: 2.5rem; }
+            nav { display: none; } /* Simplificat per l'exemple */
+            .logo { margin: 0 auto; }
+        }
+    </style>
 </head>
 <body>
 
-
-    <nav class="navbar">
-        <div class="logo">MY Personal Shopper</div>
-        <ul class="nav-links">
-            <li><a href="#inici">Inici</a></li>
-            <li><a href="#serveis">Serveis</a></li>
-            <li><a href="#sobre-mi">Sobre mi</a></li>
-            <li><a href="#contacte" class="btn-nav">Reservar</a></li>
-        </ul>
-        <div class="hamburger">
-            <span class="bar"></span>
-            <span class="bar"></span>
-            <span class="bar"></span>
-        </div>
-    </nav>
-
-
-    <header id="inici" class="hero">
-        <div class="hero-content">
-            <h1>Descobreix la teva millor versió</h1>
-            <p>Assessoria d'imatge i experiències de compra personalitzades per potenciar el teu estil únic.</p>
-            <a href="#serveis" class="btn-primary">Veure Serveis</a>
-        </div>
+    <header>
+        <div class="logo">My Personal Shopper</div>
+        <nav>
+            <ul>
+                <li><a href="#steps">Com funciona</a></li>
+                <li><a href="#pricing">Preus</a></li>
+                <li><a href="login.html" class="btn-login" onclick="simularLogin()">Login</a></li>
+            </ul>
+        </nav>
     </header>
-   
-   
 
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Descobreix el teu millor estil sense esforç</h1>
+            <p>5 peces seleccionades per un estilista expert, enviades a casa teva. Prova-t'ho tot, paga només el que t'agradi.</p>
+            <button class="btn-primary" onclick="window.location.href='registre.html'">Començar ara</button>
+        </div>
+    </section>
 
-    <section id="serveis" class="services">
-        <h2>Els Meus Serveis</h2>
-        <div class="services-grid">
-            <div class="service-card">
-                <h3>Ruta de Compres</h3>
-                <p>T'acompanyo a les millors botigues per trobar les peces que realment et senten bé i s'ajusten al teu pressupost.</p>
+    <section id="steps" class="steps">
+        <h2 class="section-title">L'experiència, pas a pas</h2>
+        <div class="steps-grid">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h3>Perfil d'Estil</h3>
+                <p>Omple el nostre qüestionari visual en 5 minuts. Talles, gustos i pressupost.</p>
             </div>
-            <div class="service-card">
-                <h3>Detox d'Armari</h3>
-                <p>Analitzem el teu guarda-roba, eliminem el que no necessites i creem nous looks amb el que ja tens.</p>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h3>La Selecció</h3>
+                <p>El teu Personal Shopper tria 5 peces úniques pensades només per a tu.</p>
             </div>
-            <div class="service-card">
-                <h3>Estilisme d'Events</h3>
-                <p>Tens un casament o una reunió important? Trobarem el look perfecte perquè brillis amb llum pròpia.</p>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h3>Prova a Casa</h3>
+                <p>Rep la caixa. Tens 7 dies per provar-t'ho tot davant del teu mirall.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">04</div>
+                <h3>Decideix</h3>
+                <p>Queda't el que t'enamori i retorna la resta gratis. Fàcil i ràpid.</p>
             </div>
         </div>
     </section>
 
-
-    <section id="contacte" class="contact">
-        <h2>Comencem el canvi?</h2>
-        <p>Escriu-me i parlem dels teus objectius d'estil.</p>
-        <form id="contactForm">
-            <input type="text" placeholder="El teu nom" required>
-            <input type="email" placeholder="El teu email" required>
-            <textarea placeholder="Com et puc ajudar?" rows="4" required></textarea>
-            <button type="submit" class="btn-primary">Enviar Missatge</button>
-        </form>
+    <section id="pricing" class="pricing">
+        <h2>Servei d'Estilisme Premium</h2>
+        <p class="price-tag">Només 10€ per assessorament (Gratis si et quedes almenys una peça)</p>
+        <button class="btn-secondary" onclick="window.location.href='perfil-estil.html'">Vull la meva caixa</button>
+        <p style="margin-top: 20px; font-size: 0.8rem; opacity: 0.7;">* Si et quedes les 5 peces, tens un 25% de descompte extra.</p>
     </section>
-
 
     <footer>
-        <p>&copy; 2025 MY Personal Shopper. Tots els drets reservats.</p>
+        <div class="footer-links">
+            <a href="#">Sobre nosaltres</a>
+            <a href="#">Preguntes freqüents</a>
+            <a href="#">Privacitat</a>
+            <a href="#">Contacte</a>
+        </div>
+        <div style="margin-top: 20px; border-top: 1px solid #ddd; padding-top: 10px;">
+        <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 1px;">Àrea Interna (Demo):</p>
+        <a href="shopper-dashboard.html" style="color: #D4AF37; font-weight: bold;">Accés Personal Shopper Workstation</a>
+</div>
+        <p>&copy; 2025 AIrtifex Solutions per a My Personal Shopper. Tots els drets reservats.</p>
     </footer>
 
+    <script>
+        // Funció per simular l'inici del flux de "Crear Perfil"
+        function iniciarTest() {
+            // Això simularia anar a la pantalla del Wizard que hem dissenyat als wireframes
+            const confirmacio = confirm("Vols començar a crear el teu Perfil d'Estil (5 min)?");
+            if (confirmacio) {
+                alert("Redirigint al formulari visual... (Aquesta seria la Pantalla 1 del Wireframe)");
+                // window.location.href = '/crear-perfil.html';
+            }
+        }
 
-    <script src="script.js"></script>
+        // Funció per simular el Login
+        function simularLogin() {
+            alert("Obrint modal d'accés per a clients registrats...");
+        }
+
+        // Petit efecte de scroll suau (tot i que CSS scroll-behavior ho fa, JS assegura compatibilitat)
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
 </body>
 </html>
