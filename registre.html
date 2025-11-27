@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre | My Personal Shopper</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ESTILS COMUNS (COHERÈNCIA DE MARCA) --- */
+        :root {
+            --color-bg: #ffffff;
+            --color-text: #1a1a1a;
+            --color-accent: #D4AF37; /* Daurat elegant */
+            --color-input-border: #cccccc;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: #f9f9f9; /* Fons lleugerament gris per destacar la targeta */
+            color: var(--color-text);
+            font-family: var(--font-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- CONTENIDOR DEL REGISTRE --- */
+        .register-wrapper {
+            background-color: #fff;
+            width: 100%;
+            max-width: 900px;
+            display: flex;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            overflow: hidden;
+            border: 1px solid #eee;
+        }
+
+        /* Part Esquerra: Imatge Editorial */
+        .register-image {
+            width: 40%;
+            background-image: url('https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80');
+            background-size: cover;
+            background-position: center;
+            display: none; /* Ocult en mòbils */
+        }
+
+        /* Part Dreta: Formulari */
+        .register-form-container {
+            width: 100%;
+            padding: 50px;
+        }
+
+        @media (min-width: 768px) {
+            .register-image { display: block; }
+            .register-form-container { width: 60%; }
+        }
+
+        .header-minimal {
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .header-minimal h1 {
+            font-family: var(--font-title);
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .header-minimal p {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        /* --- FORMULARI --- */
+        form {
+            display: grid;
+            gap: 20px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        label {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 5px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        input {
+            padding: 12px;
+            border: none;
+            border-bottom: 1px solid var(--color-input-border);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: 0.3s;
+            background: transparent;
+        }
+
+        input:focus {
+            outline: none;
+            border-bottom-color: var(--color-accent);
+        }
+
+        /* --- BOTONS I LINKS --- */
+        .btn-submit {
+            background-color: var(--color-text);
+            color: #fff;
+            padding: 15px;
+            border: none;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 20px;
+        }
+
+        .btn-submit:hover {
+            background-color: var(--color-accent);
+        }
+
+        .login-link {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 0.9rem;
+        }
+
+        .login-link a {
+            color: var(--color-text);
+            text-decoration: underline;
+            font-weight: 700;
+        }
+
+        /* --- MISSATGE FEEDBACK (Simulació) --- */
+        #feedbackMessage {
+            display: none;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f0fff4;
+            border: 1px solid #c6f6d5;
+            color: #2f855a;
+            text-align: center;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="register-wrapper">
+        <div class="register-image"></div>
+
+        <div class="register-form-container">
+            <div class="header-minimal">
+                <h1>Uneix-te a My Personal Shopper</h1>
+                <p>Crea el teu compte per començar l'experiència d'estil.</p>
+            </div>
+
+            <form id="registerForm">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nom">Nom</label>
+                        <input type="text" id="nom" required placeholder="Julieta">
+                    </div>
+                    <div class="form-group">
+                        <label for="cognoms">Cognoms</label>
+                        <input type="text" id="cognoms" required placeholder="Serrano">
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="nif">NIF</label>
+                        <input type="text" id="nif" required placeholder="12345678A">
+                    </div>
+                    <div class="form-group">
+                        <label for="telefon">Telèfon</label>
+                        <input type="tel" id="telefon" required placeholder="600 000 000">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="adreca">Adreça Postal Completa</label>
+                    <input type="text" id="adreca" required placeholder="Carrer de l'Estil, 1, Barcelona">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Correu Electrònic</label>
+                    <input type="email" id="email" required placeholder="hola@exemple.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">Contrasenya</label>
+                    <input type="password" id="password" required placeholder="********">
+                </div>
+
+                <button type="submit" class="btn-submit">Crear Compte</button>
+            </form>
+
+            <div id="feedbackMessage">
+                Compte creat correctament! Redirigint al teu Perfil d'Estil...
+            </div>
+
+            <div class="login-link">
+                Ja tens compte? <a href="login.html">Inicia sessió</a>
+            </div>
+            <div class="login-link" style="margin-top: 10px;">
+                <a href="index.html" style="font-weight: 300; text-decoration: none;">← Tornar a l'inici</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Simulació de la lògica de registre (MVP Javascript)
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault(); // Evita que la pàgina es recarregui de debò
+
+            const btn = document.querySelector('.btn-submit');
+            const originalText = btn.innerText;
+            
+            // 1. Canvi visual per indicar "carregant"
+            btn.innerText = "Processant...";
+            btn.style.opacity = "0.7";
+
+            // 2. Recollida de dades (Simulada)
+            const dadesUsuari = {
+                nom: document.getElementById('nom').value,
+                email: document.getElementById('email').value,
+                // Aquí en un futur enviaríem això al backend (Java/Python)
+            };
+
+            // 3. Simulació de retard de xarxa (1.5 segons)
+            setTimeout(() => {
+                // 4. Èxit
+                btn.innerText = originalText;
+                btn.style.opacity = "1";
+                document.getElementById('registerForm').style.display = 'none'; // Amaguem el formulari
+                document.getElementById('feedbackMessage').style.display = 'block'; // Mostrem missatge
+
+                // 5. Redirecció simulada al pas següent (Creació de Perfil d'Estil)
+                console.log("Usuari registrat:", dadesUsuari);
+                setTimeout(() => {
+                    window.location.href = 'perfil-estil.html';
+                    // window.location.href = 'perfil-estil.html'; 
+                }, 2000);
+
+            }, 1500);
+        });
+    </script>
+</body>
+</html>

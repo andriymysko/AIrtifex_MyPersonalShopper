@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workstation | My Personal Shopper</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-body: #f0f2f5;
+            --bg-sidebar: #ffffff;
+            --accent: #D4AF37;
+            --text-main: #333;
+            --success: #2f855a;
+            --danger: #e53e3e;
+            --warning: #dd6b20;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Lato', sans-serif; background-color: var(--bg-body); color: var(--text-main); height: 100vh; display: flex; overflow: hidden; }
+
+        /* --- SIDEBAR ESQUERRA: INFO CLIENT --- */
+        .client-panel {
+            width: 320px;
+            background: var(--bg-sidebar);
+            border-right: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            z-index: 10;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.05);
+        }
+
+        .shopper-header {
+            padding: 20px;
+            font-size: 0.8rem;
+            color: #666;
+            background: #f8f8f8;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .client-selector-area {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        select#clientSelector {
+            width: 100%;
+            padding: 10px;
+            font-family: 'Lato', sans-serif;
+            font-size: 1rem;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .client-details-scroll {
+            padding: 20px;
+            overflow-y: auto;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .client-card {
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .client-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: #ddd;
+            margin: 0 auto 10px;
+            background-size: cover;
+            background-position: center;
+        }
+
+        .tags { display: flex; flex-wrap: wrap; gap: 5px; justify-content: center; margin-top: 10px; }
+        .tag { font-size: 0.7rem; background: #eee; padding: 2px 8px; border-radius: 12px; font-weight: bold; }
+        .tag.style { background: #000; color: #fff; }
+
+        .info-block h4 { font-size: 0.85rem; text-transform: uppercase; border-bottom: 1px solid #eee; padding-bottom: 5px; margin-bottom: 10px; color: var(--accent); }
+        .info-row { display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 5px; }
+
+        /* --- ZONA CENTRAL: CATÀLEG --- */
+        .catalog-area {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .catalog-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center; /* Alinea verticalment el títol i els filtres */
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        /* Contenidor de filtres per organitzar botons i select */
+        .filters-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .filters { display: flex; gap: 5px; }
+        .filter-btn { padding: 8px 15px; border: 1px solid #ccc; background: #fff; border-radius: 4px; cursor: pointer; transition: 0.2s; font-size: 0.9rem; }
+        .filter-btn:hover { background: #f0f0f0; }
+        .filter-btn.active { background: #000; color: #fff; border-color: #000; }
+
+        /* Estil del nou selector de marques */
+        #brandFilter {
+            padding: 8px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: 'Lato', sans-serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            background-color: #fff;
+            min-width: 150px;
+        }
+
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 20px;
+            padding-bottom: 50px;
+        }
+
+        .product-card {
+            background: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            transition: 0.2s;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .product-card:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+
+        .product-img { height: 180px; background: #eee; background-size: cover; background-position: center; }
+        
+        .product-info { padding: 15px; flex-grow: 1; display: flex; flex-direction: column; justify-content: space-between; }
+        .brand { font-size: 0.7rem; color: #888; text-transform: uppercase; font-weight: 700; }
+        .name { font-weight: bold; font-size: 0.95rem; margin-bottom: 5px; line-height: 1.2;}
+        .price { font-family: 'Playfair Display', serif; font-size: 1.1rem; margin-top: 5px; }
+
+        .status-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 0.7rem;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: bold;
+            color: #fff;
+            z-index: 2;
+        }
+        .status-ok { background-color: var(--success); }
+        .status-low { background-color: var(--warning); }
+        .status-out { background-color: var(--danger); }
+        
+        .product-card.out-of-stock { opacity: 0.6; }
+        .product-card.out-of-stock .product-img { filter: grayscale(100%); }
+
+        .add-btn {
+            width: 100%;
+            padding: 10px;
+            background: var(--text-main);
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            margin-top: 15px;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+        .add-btn:hover { background: var(--accent); }
+        .add-btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        /* --- SIDEBAR DRETA: CAIXA --- */
+        .box-panel {
+            width: 320px;
+            background: #fff;
+            border-left: 1px solid #ddd;
+            display: flex;
+            flex-direction: column;
+            box-shadow: -5px 0 15px rgba(0,0,0,0.05);
+            z-index: 10;
+        }
+
+        .box-header {
+            padding: 20px;
+            background: #1a1a1a;
+            color: #fff;
+            text-align: center;
+        }
+        .box-count { font-family: 'Playfair Display', serif; font-size: 2.5rem; }
+        .box-limit { font-size: 1rem; opacity: 0.7; }
+
+        .box-items {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #fdfdfd;
+        }
+
+        .box-item {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #eee;
+            background: #fff;
+            padding: 10px;
+            border-radius: 6px;
+            animation: slideIn 0.3s ease;
+        }
+        
+        @keyframes slideIn { from { transform: translateX(20px); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        .box-item-img { width: 50px; height: 50px; background: #eee; border-radius: 4px; background-size: cover; }
+        .box-item-details { flex-grow: 1; }
+        .box-item-title { font-size: 0.85rem; font-weight: bold; }
+        .remove-btn { color: #999; cursor: pointer; border:none; background:transparent; transition: 0.2s; }
+        .remove-btn:hover { color: var(--danger); }
+
+        .box-actions {
+            padding: 20px;
+            border-top: 1px solid #eee;
+            background: #fff;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 15px;
+            background: #ccc; 
+            color: #fff;
+            border: none;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: not-allowed;
+            border-radius: 4px;
+            transition: 0.3s;
+        }
+
+        .submit-btn.ready {
+            background: var(--success);
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(47, 133, 90, 0.3);
+        }
+    </style>
+</head>
+<body>
+
+    <aside class="client-panel">
+        <div class="shopper-header">
+            <span class="material-icons" style="font-size:16px;">work</span> Workstation: <strong>Juli Alafia</strong>
+        </div>
+
+        <div class="client-selector-area">
+            <label style="font-size: 0.7rem; font-weight:bold; color:#888; display:block; margin-bottom:5px;">CLIENT ACTUAL:</label>
+            <select id="clientSelector" onchange="changeClient()">
+                <option value="0">Julieta Serrano (Pendent)</option>
+                <option value="1">Joan Campoy (Subscripció)</option>
+            </select>
+        </div>
+        
+        <div class="client-details-scroll" id="clientDetails">
+            </div>
+    </aside>
+
+    <section class="catalog-area">
+        <div class="catalog-header">
+            <h2>Catàleg</h2>
+            
+            <div class="filters-container">
+                <div class="filters">
+                    <button class="filter-btn active" onclick="setCategoryFilter('all', this)">Tot</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('top', this)">Superior</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('bottom', this)">Inferior</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('shoes', this)">Sabates</button>
+                    <button class="filter-btn" onclick="setCategoryFilter('acc', this)">Acc.</button>
+                </div>
+
+                <select id="brandFilter" onchange="setBrandFilter(this.value)">
+                    <option value="all">Totes les Marques</option>
+                    </select>
+            </div>
+        </div>
+
+        <div class="products-grid" id="productGrid">
+            </div>
+    </section>
+
+    <aside class="box-panel">
+        <div class="box-header">
+            <p id="boxHeaderTitle">CAIXA DE LA JULIETA</p>
+            <div>
+                <span class="box-count" id="boxCount">0</span>
+                <span class="box-limit">/ 5 peces</span>
+            </div>
+        </div>
+
+        <div class="box-items" id="boxItemsContainer">
+            <p style="text-align:center; color:#999; margin-top:50px;">La caixa està buida.</p>
+        </div>
+
+        <div class="box-actions">
+            <div style="display:flex; justify-content:space-between; margin-bottom:10px; font-weight:bold;">
+                <span>Total Estimat:</span>
+                <span id="boxTotal">0€</span>
+            </div>
+            <button class="submit-btn" id="submitBtn" onclick="finalitzarComanda()">ENVIAR CAIXA</button>
+        </div>
+    </aside>
+
+    <script>
+        // --- DADES DE CLIENTS ---
+        const clients = [
+            {
+                id: 0,
+                name: "Julieta Serrano",
+                since: "Oct 2025",
+                img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+                tags: ["Urban Chic", "Minimalista", "Colors Freds"],
+                sizes: { top: "M", bottom: "38", shoes: "39" },
+                note: "No m'agrada gens el color groc. Necessito roba còmoda per a reunions.",
+                alert: "Devolució anterior: Pantalons massa ajustats."
+            },
+            {
+                id: 1,
+                name: "Joan Campoy",
+                since: "Nov 2025",
+                img: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?ixlib=rb-1.2.1&auto=format&fit=crop&w=300&q=80",
+                tags: ["Casual", "Modern", "Subscripció"],
+                sizes: { top: "L", bottom: "42", shoes: "43" },
+                note: "Vull roba per l'oficina però que no sigui vestit clàssic. M'agraden les camises estampades.",
+                alert: "Nota: Té un gust 'diferent' segons les amistats."
+            }
+        ];
+
+        // --- DADES DE PRODUCTES (Amb marques variades) ---
+        const products = [
+            { id: 1, name: "Camisa Flors", brand: "Zara", price: 45, category: "top", stock: "ok", img: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=400" },
+            { id: 2, name: "Texans Turquesa", brand: "Levis", price: 60, category: "bottom", stock: "ok", img: "https://images.unsplash.com/photo-1542272454324-414fb581c1c7?w=400" },
+            { id: 3, name: "Motxilla Storm", brand: "Storm", price: 25, category: "acc", stock: "ok", img: "https://images.unsplash.com/photo-1553062407-98eeb64c6a62?w=400" },
+            { id: 4, name: "Jaqueta Cuir", brand: "Mango", price: 120, category: "top", stock: "low", img: "https://images.unsplash.com/photo-1551028919-ac7bcb7d715a?w=400" },
+            { id: 5, name: "Sandàlies", brand: "CoolWalk", price: 30, category: "shoes", stock: "ok", img: "https://images.unsplash.com/photo-1562273138-f46be4ebdf6e?w=400" },
+            { id: 6, name: "Cinturó Snake", brand: "Storm", price: 15, category: "acc", stock: "out", img: "https://images.unsplash.com/photo-1624222247344-550fb60583dc?w=400" }, 
+            { id: 7, name: "Vestit Estiu", brand: "H&M", price: 35, category: "top", stock: "ok", img: "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400" },
+            { id: 8, name: "Barret Explorer", brand: "Storm", price: 20, category: "acc", stock: "ok", img: "https://images.unsplash.com/photo-1514327605112-b887c0e61c0a?w=400" },
+            { id: 9, name: "Camisa Oxford", brand: "Ralph", price: 85, category: "top", stock: "ok", img: "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=400" },
+            { id: 10, name: "Pantalons Chino", brand: "Dockers", price: 55, category: "bottom", stock: "ok", img: "https://images.unsplash.com/photo-1624378439575-d8705ad7ae80?w=400" },
+            { id: 11, name: "Sneakers Urban", brand: "Nike", price: 95, category: "shoes", stock: "ok", img: "https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400" },
+            { id: 12, name: "Ulleres Sol", brand: "RayBan", price: 110, category: "acc", stock: "low", img: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400" },
+            { id: 13, name: "Blazer Blau", brand: "Massimo", price: 150, category: "top", stock: "ok", img: "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=400" },
+            { id: 14, name: "Faldilla Midi", brand: "Zara", price: 40, category: "bottom", stock: "ok", img: "https://images.unsplash.com/photo-1583496661160-fb5886a0aaaa?w=400" },
+            { id: 15, name: "Botes Pell", brand: "Timber", price: 130, category: "shoes", stock: "out", img: "https://images.unsplash.com/photo-1608256246200-53e635b5b69f?w=400" },
+            { id: 16, name: "Mocador Seda", brand: "Gucci", price: 200, category: "acc", stock: "ok", img: "https://images.unsplash.com/photo-1584030373081-f37b7bb4fa8e?w=400" }
+        ];
+
+        let box = [];
+        let currentCategoryFilter = 'all';
+        let currentBrandFilter = 'all';
+
+        // --- FUNCIONS CLIENT ---
+        function changeClient() {
+            const selector = document.getElementById('clientSelector');
+            const clientId = parseInt(selector.value);
+            const client = clients.find(c => c.id === clientId);
+            
+            const container = document.getElementById('clientDetails');
+            container.innerHTML = `
+                <div class="client-card">
+                    <div class="client-avatar" style="background-image: url('${client.img}')"></div>
+                    <h3>${client.name}</h3>
+                    <p style="font-size: 0.8rem; color: #666;">Client des de: ${client.since}</p>
+                    <div class="tags">
+                        ${client.tags.map(t => `<span class="tag ${t === client.tags[0] ? 'style' : ''}">${t}</span>`).join('')}
+                    </div>
+                </div>
+
+                <div class="info-block">
+                    <h4>Talles</h4>
+                    <div class="info-row"><span>Superior:</span> <strong>${client.sizes.top}</strong></div>
+                    <div class="info-row"><span>Inferior:</span> <strong>${client.sizes.bottom}</strong></div>
+                    <div class="info-row"><span>Sabates:</span> <strong>${client.sizes.shoes}</strong></div>
+                </div>
+
+                <div class="info-block">
+                    <h4>Notes / Feedback</h4>
+                    <p style="font-size: 0.85rem; color: #555; font-style: italic;">"${client.note}"</p>
+                    ${client.alert ? `<div style="margin-top:10px; padding: 10px; background: #fff3cd; border-radius: 4px; font-size: 0.8rem;">⚠️ <strong>Atenció:</strong> ${client.alert}</div>` : ''}
+                </div>
+            `;
+
+            box = [];
+            document.getElementById('boxHeaderTitle').innerText = `CAIXA DE ${client.name.split(' ')[0].toUpperCase()}`;
+            updateBoxUI();
+            renderCatalog();
+        }
+
+        // --- FUNCIONS CATÀLEG (FILTRATGE AVANÇAT) ---
+        
+        // 1. Inicialitzar el Select de Marques
+        function initBrandFilter() {
+            const brandSelect = document.getElementById('brandFilter');
+            const brands = [...new Set(products.map(p => p.brand))].sort(); // Marques úniques i ordenades
+            
+            brands.forEach(brand => {
+                const option = document.createElement('option');
+                option.value = brand;
+                option.innerText = brand;
+                brandSelect.appendChild(option);
+            });
+        }
+
+        // 2. Set Category
+        function setCategoryFilter(category, btnElement) {
+            currentCategoryFilter = category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            btnElement.classList.add('active');
+            renderCatalog();
+        }
+
+        // 3. Set Brand
+        function setBrandFilter(brand) {
+            currentBrandFilter = brand;
+            renderCatalog();
+        }
+
+        // 4. Renderitzar amb lògica "AND" (Categoria + Marca)
+        function renderCatalog() {
+            const grid = document.getElementById('productGrid');
+            grid.innerHTML = '';
+
+            const filteredProducts = products.filter(p => {
+                const matchCategory = currentCategoryFilter === 'all' || p.category === currentCategoryFilter;
+                const matchBrand = currentBrandFilter === 'all' || p.brand === currentBrandFilter;
+                return matchCategory && matchBrand;
+            });
+
+            if(filteredProducts.length === 0) {
+                grid.innerHTML = '<p style="grid-column: 1/-1; text-align:center; padding:40px; color:#999;">No s\'han trobat productes amb aquests filtres.</p>';
+                return;
+            }
+
+            filteredProducts.forEach(p => {
+                let statusHtml = '';
+                let statusClass = '';
+                let btnDisabled = '';
+
+                if(p.stock === 'ok') { statusHtml = 'Disponible'; statusClass = 'status-ok'; }
+                else if(p.stock === 'low') { statusHtml = 'Poques unitats'; statusClass = 'status-low'; }
+                else { 
+                    statusHtml = 'Esgotat'; 
+                    statusClass = 'status-out'; 
+                    btnDisabled = 'disabled style="background:#ccc; cursor:not-allowed;"'; 
+                }
+
+                const isInBox = box.find(item => item.id === p.id);
+                const btnText = isInBox ? 'Afegit ✓' : (p.stock === 'out' ? 'No Disponible' : 'Afegir a la caixa');
+                const btnStyle = isInBox ? 'background:#2f855a; pointer-events:none;' : '';
+
+                const card = document.createElement('div');
+                card.className = `product-card ${p.stock === 'out' ? 'out-of-stock' : ''}`;
+                card.innerHTML = `
+                    <div class="product-img" style="background-image: url('${p.img}')"></div>
+                    <div class="status-badge ${statusClass}">${statusHtml}</div>
+                    <div class="product-info">
+                        <div>
+                            <div class="brand">${p.brand}</div>
+                            <div class="name">${p.name}</div>
+                            <div class="price">${p.price}€</div>
+                        </div>
+                        <button class="add-btn" onclick="addToBox(${p.id})" ${btnDisabled} style="${btnStyle}">
+                            ${btnText}
+                        </button>
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        // --- FUNCIONS CAIXA ---
+        function addToBox(id) {
+            if (box.length >= 5) {
+                alert("La caixa ja està plena (5/5).");
+                return;
+            }
+            if(box.find(item => item.id === id)) return;
+            const product = products.find(p => p.id === id);
+            box.push(product);
+            updateBoxUI();
+            renderCatalog();
+        }
+
+        function removeFromBox(index) {
+            box.splice(index, 1);
+            updateBoxUI();
+            renderCatalog();
+        }
+
+        function updateBoxUI() {
+            const container = document.getElementById('boxItemsContainer');
+            const countLabel = document.getElementById('boxCount');
+            const totalLabel = document.getElementById('boxTotal');
+            const btn = document.getElementById('submitBtn');
+
+            countLabel.innerText = box.length;
+            
+            if (box.length === 0) {
+                container.innerHTML = '<p style="text-align:center; color:#999; margin-top:50px;">La caixa està buida.</p>';
+                totalLabel.innerText = '0€';
+                btn.classList.remove('ready');
+                btn.innerText = "ENVIAR CAIXA";
+                btn.disabled = true;
+                return;
+            }
+
+            container.innerHTML = '';
+            let total = 0;
+
+            box.forEach((item, index) => {
+                total += item.price;
+                const div = document.createElement('div');
+                div.className = 'box-item';
+                div.innerHTML = `
+                    <div class="box-item-img" style="background-image: url('${item.img}')"></div>
+                    <div class="box-item-details">
+                        <div class="box-item-title">${item.name}</div>
+                        <div style="font-size:0.8rem; color:#666;">${item.price}€</div>
+                    </div>
+                    <button class="remove-btn" onclick="removeFromBox(${index})">
+                        <span class="material-icons">delete</span>
+                    </button>
+                `;
+                container.appendChild(div);
+            });
+
+            totalLabel.innerText = total + '€';
+
+            if (box.length === 5) {
+                btn.classList.add('ready');
+                btn.innerText = "ENVIAR CAIXA ARA";
+                btn.disabled = false;
+            } else {
+                btn.classList.remove('ready');
+                btn.innerText = `FALTEN ${5 - box.length} PECES`;
+                btn.disabled = true;
+            }
+        }
+
+        function finalitzarComanda() {
+            const selector = document.getElementById('clientSelector');
+            const clientName = selector.options[selector.selectedIndex].text;
+            
+            if (box.length !== 5) return;
+            const confirm = window.confirm(`Segur que vols enviar aquesta selecció per a: ${clientName}?`);
+            if(confirm) {
+                alert("Caixa enviada correctament! S'ha notificat al departament de logística.");
+                box = [];
+                updateBoxUI();
+                renderCatalog();
+            }
+        }
+
+        // --- INICIALITZACIÓ ---
+        initBrandFilter(); // Inicia el desplegable de marques
+        changeClient();    // Carrega el client inicial
+        renderCatalog();   // Renderitza el catàleg
+
+    </script>
+</body>
+</html>
