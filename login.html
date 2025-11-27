@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sessió | My Personal Shopper</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- ESTILS BASE --- */
+        :root {
+            --color-bg: #f4f4f4; /* Gris molt suau de fons */
+            --color-card: #ffffff;
+            --color-text: #1a1a1a;
+            --color-accent: #D4AF37; /* Daurat */
+            --color-input-border: #dddddd;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--color-bg);
+            /* Imatge de fons subtil amb opacitat */
+            background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            color: var(--color-text);
+            font-family: var(--font-body);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        /* --- TARGETA DE LOGIN --- */
+        .login-card {
+            background-color: var(--color-card);
+            width: 100%;
+            max-width: 450px;
+            padding: 60px 40px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+            text-align: center;
+            position: relative;
+            border-top: 5px solid var(--color-accent); /* Detall de color */
+        }
+
+        .login-header h1 {
+            font-family: var(--font-title);
+            font-size: 2.2rem;
+            margin-bottom: 10px;
+            color: #000;
+        }
+
+        .login-header p {
+            font-size: 0.95rem;
+            color: #777;
+            margin-bottom: 40px;
+        }
+
+        /* --- FORMULARI --- */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        label {
+            display: block;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            margin-bottom: 8px;
+            font-weight: 700;
+            color: #555;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px 0;
+            border: none;
+            border-bottom: 1px solid var(--color-input-border);
+            font-family: var(--font-body);
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: transparent;
+        }
+
+        input:focus {
+            outline: none;
+            border-bottom-color: var(--color-accent);
+        }
+
+        /* --- BOTÓ ACCIÓ --- */
+        .btn-login {
+            background-color: #000;
+            color: #fff;
+            width: 100%;
+            padding: 16px;
+            border: none;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-login:hover {
+            background-color: var(--color-accent);
+        }
+
+        /* --- LINKS EXTRES --- */
+        .extra-links {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            font-size: 0.9rem;
+        }
+
+        .extra-links a {
+            color: #666;
+            text-decoration: none;
+            transition: 0.3s;
+        }
+
+        .extra-links a:hover {
+            color: #000;
+            text-decoration: underline;
+        }
+
+        .divider {
+            margin: 20px 0;
+            border-top: 1px solid #eee;
+        }
+
+        /* --- FEEDBACK VISUAL --- */
+        #errorMsg {
+            color: #e53e3e;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="login-card">
+        <div class="login-header">
+            <h1>Benvinguda</h1>
+            <p>Accedeix al teu espai personal d'estil.</p>
+        </div>
+
+        <div id="errorMsg">Usuari o contrasenya incorrectes.</div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="email">Correu Electrònic</label>
+                <input type="email" id="email" required placeholder="nom@exemple.com">
+            </div>
+
+            <div class="form-group">
+                <label for="password">Contrasenya</label>
+                <input type="password" id="password" required placeholder="********">
+            </div>
+
+            <button type="submit" class="btn-login">Entrar</button>
+        </form>
+
+        <div class="extra-links">
+            <a href="#">Has oblidat la contrasenya?</a>
+            <div class="divider"></div>
+            <span>Encara no tens compte?</span>
+            <a href="registre.html" style="font-weight: 700; color: #000;">Crea el teu Perfil d'Estil</a>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="index.html" style="font-size: 0.8rem; color: #999; text-decoration: none;">← Tornar a la portada</a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const btn = document.querySelector('.btn-login');
+            const errorMsg = document.getElementById('errorMsg');
+
+            // 1. Reset visual
+            errorMsg.style.display = 'none';
+            const originalText = btn.innerText;
+            btn.innerText = "Verificant...";
+            btn.style.opacity = "0.7";
+
+            // 2. Simulació de validació (Backend simulat)
+            setTimeout(() => {
+                // Simulem una validació bàsica
+                if (email && password.length >= 4) {
+                    // ÈXIT
+                    btn.innerText = "Accedint...";
+                    btn.style.backgroundColor = "#2f855a"; // Verd èxit momentani
+                    
+                    setTimeout(() => {
+                        // Aquí redirigim al "Dashboard" o "Wireframe 2"
+                        window.location.href = 'dashboard-client.html';
+                        // window.location.href = 'dashboard.html';
+                    }, 1000);
+                } else {
+                    // ERROR
+                    btn.innerText = originalText;
+                    btn.style.opacity = "1";
+                    errorMsg.style.display = 'block';
+                    // Petit efecte de vibració (opcional visual)
+                    document.querySelector('.login-card').animate([
+                        { transform: 'translateX(-5px)' },
+                        { transform: 'translateX(5px)' },
+                        { transform: 'translateX(0)' }
+                    ], { duration: 300 });
+                }
+            }, 1500);
+        });
+    </script>
+</body>
+</html>
