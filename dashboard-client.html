@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>El meu espai | My Personal Shopper</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <style>
+        /* --- ESTILS BASE (Coherents amb la resta) --- */
+        :root {
+            --color-bg: #f4f4f4;
+            --color-card: #ffffff;
+            --color-text: #1a1a1a;
+            --color-accent: #D4AF37;
+            --success: #2f855a;
+            --font-title: 'Playfair Display', serif;
+            --font-body: 'Lato', sans-serif;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-body);
+            min-height: 100vh;
+        }
+
+        /* --- NAVBAR SIMPLE --- */
+        header {
+            background: #fff;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .logo { font-family: var(--font-title); font-weight: 700; font-size: 1.2rem; letter-spacing: 1px; }
+        
+        .user-menu { display: flex; gap: 20px; font-size: 0.9rem; align-items: center; }
+        .user-menu a { text-decoration: none; color: #666; transition: 0.3s; }
+        .user-menu a:hover { color: #000; }
+        .avatar-mini { width: 35px; height: 35px; background: #eee; border-radius: 50%; display: inline-block; vertical-align: middle; margin-left: 10px; }
+
+        /* --- CONTINGUT PRINCIPAL --- */
+        main {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        h1 {
+            font-family: var(--font-title);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+
+        .subtitle { text-align: center; color: #666; margin-bottom: 40px; }
+
+        /* --- HERO CARD (ONE CLICK ORDER) --- */
+        .hero-card {
+            background: #fff;
+            padding: 60px 40px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+            border-top: 4px solid var(--color-accent);
+            margin-bottom: 50px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-title {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .btn-order {
+            background-color: #000;
+            color: #fff;
+            padding: 20px 50px;
+            font-size: 1.2rem;
+            border: none;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.3s;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-order:hover {
+            background-color: var(--color-accent);
+            transform: translateY(-2px);
+        }
+
+        .pricing-note {
+            margin-top: 20px;
+            font-size: 0.9rem;
+            color: #666;
+
+            border-radius: 20px;
+        }
+
+        /* --- ESTAT DE LA COMANDA (Amagat per defecte) --- */
+        .order-status-container {
+            display: none; /* Canviarà a block amb JS */
+            text-align: center;
+            animation: fadeIn 0.5s;
+        }
+
+        .status-steps {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            position: relative;
+        }
+
+        .status-steps::before {
+            content: '';
+            position: absolute;
+            top: 15px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: #eee;
+            z-index: 0;
+        }
+
+        .step {
+            position: relative;
+            z-index: 1;
+            background: #fff;
+            padding: 0 10px;
+            width: 33%;
+        }
+
+        .step-icon {
+            width: 35px;
+            height: 35px;
+            background: #eee;
+            border-radius: 50%;
+            margin: 0 auto 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+        }
+
+        .step.active .step-icon {
+            background: var(--color-accent);
+            color: #fff;
+        }
+
+        .step-text { font-size: 0.8rem; font-weight: bold; color: #999; }
+        .step.active .step-text { color: #000; }
+
+        /* --- HISTORIAL --- */
+        .history-section h2 {
+            font-size: 1.2rem;
+            border-bottom: 1px solid #ccc;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-family: var(--font-body);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .history-list { list-style: none; }
+
+        .history-item {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-left: 3px solid transparent;
+            transition: 0.3s;
+        }
+
+        .history-item:hover { transform: translateX(5px); }
+        .history-item.completed { border-left-color: var(--success); }
+        .history-item.returned { border-left-color: #999; }
+
+        .item-info h3 { font-size: 1rem; margin-bottom: 5px; }
+        .item-date { font-size: 0.8rem; color: #888; }
+        .item-status { font-weight: bold; font-size: 0.9rem; }
+        .status-done { color: var(--success); }
+        .status-ret { color: #666; }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">MY PERSONAL SHOPPER</div>
+        <nav class="user-menu">
+        <a href="perfil-estil.html">El meu Perfil</a>
+        <a href="#">Ajuda</a>
+        <a href="index.html">Sortir</a>
+        <div class="avatar-mini"></div>
+</nav>
+    </header>
+
+    <main>
+        <div class="header-text">
+            <h1>Benvinguda de nou, Julieta!</h1>
+            <p class="subtitle">La teva estilista (Marta R.) està esperant la teva ordre.</p>
+        </div>
+
+        <div class="hero-card" id="heroCard">
+            <div id="readyToOrder">
+                <div class="hero-title">Vull la meva nova selecció</div>
+                <button class="btn-order" onclick="processOrder()">
+                    Fer Comanda Ara
+                </button>
+                <div class="pricing-note">
+                    <span class="material-icons" style="font-size: 14px; vertical-align: middle;">info</span>
+                    Es carregaran 10€ en concepte d'estilista
+                </div>
+            </div>
+
+            <div class="order-status-container" id="orderStatus">
+                <h3 style="color: var(--color-accent); font-family: var(--font-title); font-size: 1.8rem;">Gràcies!</h3>
+                <p style="margin-bottom: 20px;">Hem rebut la teva petició. La Marta ja hi està treballant.</p>
+                
+                <div class="status-steps">
+                    <div class="step active">
+                        <div class="step-icon"><span class="material-icons">check</span></div>
+                        <div class="step-text">Rebuda</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-icon"><span class="material-icons">style</span></div>
+                        <div class="step-text">Styling</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-icon"><span class="material-icons">local_shipping</span></div>
+                        <div class="step-text">Enviada</div>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px; background: #f0fff4; padding: 10px; font-size: 0.9rem; color: #2f855a;">
+                    Pagament de 10€ autoritzat correctament.
+                </div>
+            </div>
+        </div>
+
+        <section class="history-section">
+            <h2>Darreres Comandes</h2>
+            <ul class="history-list">
+                <li class="history-item completed">
+                    <div class="item-info">
+                        <h3>Caixa d'Agost</h3>
+                        <span class="item-date">20 Agost 2025</span>
+                    </div>
+                    <div class="item-status status-done">Completada (3/5 peces)</div>
+                </li>
+                <li class="history-item returned">
+                    <div class="item-info">
+                        <h3>Caixa de Juliol</h3>
+                        <span class="item-date">15 Juliol 2025</span>
+                    </div>
+                    <div class="item-status status-ret">Retornada (0/5 peces)</div>
+                </li>
+            </ul>
+        </section>
+    </main>
+
+    <script>
+        // Simulació de "Pagament en 1 Clic"
+        function processOrder() {
+            // 1. Confirmació simple (simula l'autorització del banc)
+            if(confirm("Confirmes el pagament de 10€ per iniciar el servei d'assessorament?")) {
+                
+                // 2. Canvi d'Interfície (DOM Manipulation)
+                const readyDiv = document.getElementById('readyToOrder');
+                const statusDiv = document.getElementById('orderStatus');
+                const heroCard = document.getElementById('heroCard');
+
+                // Amagar botó, mostrar estat
+                readyDiv.style.display = 'none';
+                statusDiv.style.display = 'block';
+
+                // Petit efecte visual
+                heroCard.style.borderTopColor = "#2f855a"; // Canvia a verd
+            }
+        }
+    </script>
+</body>
+</html>

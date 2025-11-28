@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="ca">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>El teu Perfil d'Estil | My Personal Shopper</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet"
+    />
+
+    <style>
+      /* --- ESTILS BASE --- */
+      :root {
+        --color-bg: #f9f9f9;
+        --color-card: #ffffff;
+        --color-text: #1a1a1a;
+        --color-accent: #d4af37; /* Daurat */
+        --color-gray: #e0e0e0;
+        --font-title: "Playfair Display", serif;
+        --font-body: "Lato", sans-serif;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--color-bg);
+        color: var(--color-text);
+        font-family: var(--font-body);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
+        padding: 20px;
+      }
+
+      /* --- CONTENIDOR PRINCIPAL (WIZARD) --- */
+      .wizard-container {
+        background-color: var(--color-card);
+        width: 100%;
+        max-width: 800px;
+        min-height: 650px; /* Una mica més alt ara */
+        box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        border-radius: 4px;
+        overflow: hidden;
+      }
+
+      /* --- BARRA DE PROGRÉS --- */
+      .progress-header {
+        padding: 30px 40px;
+        border-bottom: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .step-indicator {
+        font-size: 0.9rem;
+        color: #888;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .progress-bar-bg {
+        width: 200px;
+        height: 4px;
+        background-color: var(--color-gray);
+        border-radius: 2px;
+        overflow: hidden;
+      }
+
+      .progress-bar-fill {
+        height: 100%;
+        background-color: var(--color-accent);
+        width: 20%; /* Inicial (1 de 5) */
+        transition: width 0.4s ease;
+      }
+
+      /* --- CONTINGUT DELS PASSOS --- */
+      .step-content {
+        padding: 40px;
+        flex-grow: 1;
+        display: none;
+        animation: fadeIn 0.5s ease;
+        overflow-y: auto; /* Per si la pantalla és petita */
+      }
+
+      .step-content.active {
+        display: block;
+        margin: auto;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      h2 {
+        font-family: var(--font-title);
+        font-size: 2rem;
+        margin-bottom: 10px;
+        text-align: center;
+      }
+
+      .step-subtitle {
+        text-align: center;
+        color: #666;
+        margin-bottom: 30px;
+        font-size: 0.95rem;
+      }
+
+      /* --- COMPONENTS VISUALS --- */
+
+      /* GRID D'IMATGES (PAS 1) */
+      .style-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+      }
+
+      .style-card {
+        position: relative;
+        cursor: pointer;
+        border: 2px solid transparent;
+        transition: 0.3s;
+        border-radius: 8px;
+        padding: 0px 0px 10px 0px;
+      }
+
+      .style-card img {
+        width: 100%;
+        height: 250px;
+        object-fit: cover;
+        display: block;
+        filter: grayscale(40%);
+        border-radius: 6px;
+      }
+
+      .style-card:hover img {
+        filter: grayscale(0%);
+      }
+
+      .style-card.selected {
+        border-color: var(--color-accent);
+        box-shadow: 0 5px 15px rgba(212, 175, 55, 0.2);
+      }
+.img-wrapper {
+  width: 100%;
+  aspect-ratio: 1 / 1; /* siempre cuadrado */
+  overflow: hidden; /* evita que la imagen sobresalga */
+  border-radius: 8px; /* opcional */
+}
+
+.img-wrapper img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* recorta para llenar el cuadrado sin deformar */
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.img-wrapper:hover img {
+  transform: scale(1.1); /* zoom al pasar el ratón */
+}
+      .style-name {
+        text-align: center;
+        margin-top: 10px;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-size: 0.9rem;
+      }
+
+      /* GRID D'ICONES (PAS 2 - OCASIÓ) */
+      .occasion-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 20px;
+      }
+
+      .option-card {
+        border: 1px solid #ddd;
+        padding: 20px;
+        text-align: center;
+        cursor: pointer;
+        transition: 0.2s;
+        border-radius: 4px;
+      }
+
+      .option-card:hover {
+        border-color: #000;
+      }
+
+      .option-card.selected {
+        background-color: #000;
+        color: #fff;
+        border-color: #000;
+      }
+
+      .option-card .material-icons {
+        font-size: 2rem;
+        margin-bottom: 10px;
+      }
+      .option-title {
+        font-weight: bold;
+        text-transform: uppercase;
+        font-size: 0.9rem;
+      }
+
+      /* BOTONS DE TALLES (PAS 3) */
+      .size-group {
+        margin-bottom: 30px;
+      }
+      .size-label {
+        display: block;
+        margin-bottom: 10px;
+        font-weight: 700;
+        color: #555;
+      }
+      .size-options {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+      }
+
+      .size-btn {
+        padding: 10px 20px;
+        border: 1px solid #ccc;
+        background: #fff;
+        cursor: pointer;
+        font-family: var(--font-body);
+        transition: 0.2s;
+        min-width: 50px;
+      }
+      .size-btn:hover {
+        border-color: #000;
+      }
+      .size-btn.selected {
+        background-color: #000;
+        color: #fff;
+        border-color: #000;
+      }
+
+      /* SLIDERS I FIT (PAS 4) */
+      .fit-selector {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 40px;
+        gap: 10px;
+      }
+      .fit-option {
+        flex: 1;
+        border: 1px solid #eee;
+        padding: 15px;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 4px;
+      }
+      .fit-option.selected {
+        border: 2px solid var(--color-accent);
+        background: #fffcf0;
+      }
+      .fit-visual {
+        height: 60px;
+        background: #eee;
+        margin-bottom: 10px;
+        border-radius: 4px;
+        margin: 0 auto 10px;
+        width: 40px;
+      }
+
+      /* Visualització simple de fit amb CSS */
+      .fit-tight {
+        width: 20px;
+      }
+      .fit-regular {
+        width: 40px;
+      }
+      .fit-oversize {
+        width: 70px;
+      }
+
+      .budget-options {
+        display: flex;
+        gap: 15px;
+        margin-top: 10px;
+      }
+      .budget-btn {
+        flex: 1;
+        padding: 15px;
+        border: 1px solid #ccc;
+        background: white;
+        cursor: pointer;
+      }
+      .budget-btn.selected {
+        background: #000;
+        color: white;
+        border-color: #000;
+      }
+
+      /* FOOTER */
+      .wizard-footer {
+        padding: 20px 40px;
+        border-top: 1px solid #eee;
+        display: flex;
+        justify-content: space-between;
+        background-color: #fff;
+        margin-top: auto; /* Empeny al final */
+      }
+
+      .btn-nav {
+        padding: 12px 30px;
+        border: none;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        cursor: pointer;
+        transition: 0.3s;
+      }
+
+      .btn-prev {
+        background: transparent;
+        color: #888;
+      }
+      .btn-prev:hover {
+        color: #000;
+      }
+      .btn-prev:disabled {
+        opacity: 0;
+        cursor: default;
+      }
+
+      .btn-next {
+        background-color: #000;
+        color: #fff;
+      }
+      .btn-next:hover {
+        background-color: var(--color-accent);
+      }
+    </style>
+  </head>
+  <body>
+    
+
+    
+    <div class="wizard-container">
+      <div class="progress-header">
+        <div class="step-indicator" id="stepIndicator">Pas 1 de 5</div>
+        <div class="progress-bar-bg">
+          <div class="progress-bar-fill" id="progressBar"></div>
+        </div>
+      </div>
+
+      <div class="step-content active" id="step1">
+        <h2>Quin és el teu estil?</h2>
+        <p class="step-subtitle">Tria la imatge que més t'inspiri avui.</p>
+        <div class="style-grid">
+          <div
+            class="style-card"
+            onclick="selectSingleOption(this, '.style-card')"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1515886657613-9f3515b0c78f?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                alt="Urban"
+              />
+            </div>
+            <div class="style-name">Urban Chic</div>
+          </div>
+
+          <div
+            class="style-card"
+            onclick="selectSingleOption(this, '.style-card')"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://i.pinimg.com/originals/ab/93/99/ab9399612830f47de6b2d1ca45b1facf.jpg"
+                alt="Boho"
+              />
+            </div>
+            <div class="style-name">Boho / Relaxat</div>
+          </div>
+
+          <div
+            class="style-card"
+            onclick="selectSingleOption(this, '.style-card')"
+          >
+            <div class="img-wrapper">
+              <img
+                src="https://images.unsplash.com/photo-1487222477894-8943e31ef7b2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=60"
+                alt="Classic"
+              />
+            </div>
+            <div class="style-name">Clàssic / Office</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content" id="step2">
+        <h2>Per a què vols la roba?</h2>
+        <p class="step-subtitle">
+          Això ens ajuda a saber si necessites talons o vambes.
+        </p>
+        <div class="occasion-grid">
+          <div
+            class="option-card"
+            onclick="selectSingleOption(this, '.option-card')"
+          >
+            <span class="material-icons">business_center</span>
+            <div class="option-title">Feina / Oficina</div>
+          </div>
+          <div
+            class="option-card"
+            onclick="selectSingleOption(this, '.option-card')"
+          >
+            <span class="material-icons">weekend</span>
+            <div class="option-title">Casual / Cap de Setmana</div>
+          </div>
+          <div
+            class="option-card"
+            onclick="selectSingleOption(this, '.option-card')"
+          >
+            <span class="material-icons">local_bar</span>
+            <div class="option-title">Sortir / Esdeveniment</div>
+          </div>
+          <div
+            class="option-card"
+            onclick="selectSingleOption(this, '.option-card')"
+          >
+            <span class="material-icons">fitness_center</span>
+            <div class="option-title">Sport / Confort</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content" id="step3">
+        <h2>Les teves talles</h2>
+        <p class="step-subtitle">
+          No et preocupis, si no et va bé el canvi és gratuït.
+        </p>
+
+        <div class="size-group">
+          <span class="size-label">Part Superior</span>
+          <div class="size-options">
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              XS
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              S
+            </button>
+            <button class="size-btn selected" onclick="selectGroupOption(this)">
+              M
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              L
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              XL
+            </button>
+          </div>
+        </div>
+
+        <div class="size-group">
+          <span class="size-label">Part Inferior</span>
+          <div class="size-options">
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              34
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              36
+            </button>
+            <button class="size-btn selected" onclick="selectGroupOption(this)">
+              38
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              40
+            </button>
+            <button class="size-btn" onclick="selectGroupOption(this)">
+              42
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="step-content" id="step4">
+        <h2>Preferències de detall</h2>
+
+        <span class="size-label" style="margin-top: 20px"
+          >Com t'agrada que et quedi la roba?</span
+        >
+        <div class="fit-selector">
+          <div
+            class="fit-option"
+            onclick="selectSingleOption(this, '.fit-option')"
+          >
+            <div class="fit-visual fit-tight" style="background: #ccc"></div>
+            <div style="font-size: 0.8rem; font-weight: bold">Ajustat</div>
+          </div>
+          <div
+            class="fit-option selected"
+            onclick="selectSingleOption(this, '.fit-option')"
+          >
+            <div class="fit-visual fit-regular" style="background: #ccc"></div>
+            <div style="font-size: 0.8rem; font-weight: bold">Regular</div>
+          </div>
+          <div
+            class="fit-option"
+            onclick="selectSingleOption(this, '.fit-option')"
+          >
+            <div class="fit-visual fit-oversize" style="background: #ccc"></div>
+            <div style="font-size: 0.8rem; font-weight: bold">Oversize</div>
+          </div>
+        </div>
+
+        <span class="size-label">Pressupost aproximat per peça</span>
+        <div class="budget-options">
+          <button
+            class="budget-btn"
+            onclick="selectSingleOption(this, '.budget-btn')"
+          >
+            Economic<br /><small>&lt; 30€</small>
+          </button>
+          <button
+            class="budget-btn selected"
+            onclick="selectSingleOption(this, '.budget-btn')"
+          >
+            Mitjà<br /><small>30€ - 80€</small>
+          </button>
+          <button
+            class="budget-btn"
+            onclick="selectSingleOption(this, '.budget-btn')"
+          >
+            Premium<br /><small>&gt; 80€</small>
+          </button>
+        </div>
+      </div>
+
+      <div class="step-content" id="step5">
+        <h2>Alguna cosa més?</h2>
+        <p class="step-subtitle">
+          Ajuda a la teva estilista a encertar al 100%.
+        </p>
+
+        <div style="text-align: center; margin-bottom: 20px">
+          <textarea
+            style="
+              width: 100%;
+              height: 120px;
+              padding: 15px;
+              margin-top: 10px;
+              border: 1px solid #ccc;
+              font-family: var(--font-body);
+              resize: none;
+              border-radius: 4px;
+            "
+            placeholder="Ex: Odio el color groc, tinc al·lèrgia a la llana, m'encanten els estampats florals..."
+          ></textarea>
+        </div>
+
+        <div
+          style="
+            background-color: #f0fff4;
+            padding: 20px;
+            border: 1px solid #c6f6d5;
+            text-align: center;
+            border-radius: 4px;
+          "
+        >
+          <h3
+            style="
+              color: #2f855a;
+              margin-bottom: 10px;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              gap: 10px;
+            "
+          >
+            <span class="material-icons">check_circle</span> Perfil Complet
+          </h3>
+          <p style="font-size: 0.9rem">
+            Hem assignat a la <strong>Marta R.</strong> com a la teva Personal
+            Shopper.
+          </p>
+        </div>
+      </div>
+
+      <div class="wizard-footer">
+        <button
+          class="btn-nav btn-prev"
+          id="prevBtn"
+          onclick="changeStep(-1)"
+          disabled
+        >
+          Enrere
+        </button>
+        <button class="btn-nav btn-next" id="nextBtn" onclick="changeStep(1)">
+          Següent
+        </button>
+      </div>
+    </div>
+
+    <script>
+      let currentStep = 1;
+      const totalSteps = 5; // ARA SÓN 5 PASSOS
+
+      function changeStep(direction) {
+        currentStep += direction;
+
+        if (currentStep < 1) currentStep = 1;
+        if (currentStep > totalSteps) {
+          alert("Perfil guardat! Ara et portarem al teu Panell Principal.");
+          // window.location.href = 'dashboard.html';
+          window.location.href = "dashboard-client.html";
+          return;
+        }
+        updateUI();
+      }
+
+      function updateUI() {
+        // Amagar tots, mostrar actual
+        for (let i = 1; i <= totalSteps; i++) {
+          document.getElementById("step" + i).classList.remove("active");
+        }
+        document.getElementById("step" + currentStep).classList.add("active");
+
+        // Barra de progrés
+        const percentage = (currentStep / totalSteps) * 100;
+        document.getElementById("progressBar").style.width = percentage + "%";
+        document.getElementById(
+          "stepIndicator"
+        ).innerText = `Pas ${currentStep} de ${totalSteps}`;
+
+        // Botons Nav
+        document.getElementById("prevBtn").disabled = currentStep === 1;
+
+        if (currentStep === totalSteps) {
+          document.getElementById("nextBtn").innerText = "Finalitzar";
+          document.getElementById("nextBtn").style.backgroundColor = "#2f855a";
+        } else {
+          document.getElementById("nextBtn").innerText = "Següent";
+          document.getElementById("nextBtn").style.backgroundColor = "#000";
+        }
+      }
+
+      // Funció genèrica per seleccionar opcions úniques (Estils, Ocasió, Fit, Budget)
+      function selectSingleOption(element, selectorClass) {
+        // Busquem el pare (o l'avi) per trobar els germans correctes
+        const parent = element.parentElement;
+        const siblings = parent.querySelectorAll(selectorClass);
+
+        siblings.forEach((el) => el.classList.remove("selected"));
+        element.classList.add("selected");
+      }
+
+      // Funció per grups de botons (Talles)
+      function selectGroupOption(element) {
+        const siblings = element.parentElement.children;
+        for (let btn of siblings) {
+          btn.classList.remove("selected");
+        }
+        element.classList.add("selected");
+      }
+    </script>
+  </body>
+</html>
