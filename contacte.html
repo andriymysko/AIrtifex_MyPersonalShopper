@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contacte | My Personal Shopper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #D4AF37; }
+        body { font-family: 'Lato', sans-serif; margin: 0; color: #333; background: #f9f9f9; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
+        
+        .contact-card { background: #fff; padding: 50px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); max-width: 500px; width: 100%; text-align: center; }
+        h1 { font-family: 'Playfair Display', serif; margin-bottom: 10px; }
+        p { color: #666; margin-bottom: 30px; }
+
+        input, textarea { width: 100%; padding: 15px; margin-bottom: 15px; border: 1px solid #ddd; font-family: 'Lato', sans-serif; }
+        textarea { height: 120px; resize: none; }
+        
+        button { background: #000; color: #fff; padding: 15px 30px; border: none; font-weight: bold; cursor: pointer; transition: 0.3s; width: 100%; }
+        button:hover { background: var(--accent); }
+
+        .back-link { display: block; margin-top: 20px; color: #999; text-decoration: none; font-size: 0.9rem; }
+    </style>
+</head>
+<body>
+    <div class="contact-card">
+        <h1>Parla amb nosaltres</h1>
+        <p>Tens dubtes o suggeriments? T'escoltem.</p>
+
+        <form onsubmit="enviarMissatge(event)">
+            <input type="text" placeholder="El teu nom" required>
+            <input type="email" placeholder="El teu correu electrònic" required>
+            <textarea placeholder="Com et podem ajudar?" required></textarea>
+            <button type="submit">Enviar Missatge</button>
+        </form>
+        
+        <a href="index.html" class="back-link">Tornar a l'inici</a>
+    </div>
+
+    <script>
+        function enviarMissatge(e) {
+            e.preventDefault();
+            alert("Missatge enviat correctament! Et respondrem en menys de 24h.");
+            e.target.reset();
+        }
+    </script>
+</body>
+</html>

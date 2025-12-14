@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre Nosaltres | My Personal Shopper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #D4AF37; --text: #1a1a1a; }
+        body { font-family: 'Lato', sans-serif; margin: 0; color: var(--text); line-height: 1.8; }
+        header { padding: 20px 5%; border-bottom: 1px solid #eee; display:flex; justify-content:space-between; align-items:center;}
+        .logo { font-family: 'Playfair Display', serif; font-weight: 700; letter-spacing: 1px; text-decoration:none; color:black;}
+        
+        .hero { background: #f4f4f4; padding: 80px 20px; text-align: center; }
+        h1 { font-family: 'Playfair Display', serif; font-size: 3rem; margin-bottom: 20px; }
+        
+        .content { max-width: 800px; margin: 50px auto; padding: 0 20px; }
+        p { margin-bottom: 20px; font-size: 1.1rem; color: #555; }
+        
+        .team-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; margin-top: 50px; }
+        .team-member { text-align: center; }
+        .avatar { width: 120px; height: 120px; background: #eee; border-radius: 50%; margin: 0 auto 15px; background-size: cover; }
+        h3 { font-family: 'Playfair Display', serif; margin-bottom: 5px; }
+        .role { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px; color: var(--accent); }
+
+        footer { text-align: center; padding: 40px; background: #1a1a1a; color: #fff; margin-top: 80px; }
+        a.back-link { display: inline-block; margin-top: 20px; color: var(--accent); text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <header>
+    <a href="index.html" class="logo" style="text-decoration:none; color:#000;">
+        MY PERSONAL SHOPPER
+    </a>
+    
+    <nav>
+        <a href="index.html" style="text-decoration:none; color:#666; font-size:0.9rem;">
+            &larr; Tornar a l'Inici
+        </a>
+    </nav>
+</header>
+
+    <div class="hero">
+        <h1>Democratitzant l'Estil</h1>
+        <p>Creiem que tothom mereix sentir-se bé amb el que porta, sense perdre temps.</p>
+    </div>
+
+    <div class="content">
+        <p><strong>My Personal Shopper</strong> va néixer amb una missió clara: portar l'experiència exclusiva d'un estilista personal a la comoditat de casa teva. Sabem que la moda pot ser aclaparadora i que el temps és or.</p>
+        <p>Per això, combinem la sensibilitat humana dels nostres experts en moda amb la tecnologia més avançada per entendre els teus gustos millor que ningú.</p>
+
+        <div class="team-grid">
+            <div class="team-member">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=300');"></div>
+                <h3>Alba Torres</h3>
+                <div class="role">Fundadora & CEO</div>
+            </div>
+            <div class="team-member">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=300');"></div>
+                <h3>Juli Alafia</h3>
+                <div class="role">Head of Styling</div>
+            </div>
+            <div class="team-member">
+                <div class="avatar" style="background-image: url('https://images.unsplash.com/photo-1580489944761-15a19d654956?w=300');"></div>
+                <h3>Marta R.</h3>
+                <div class="role">Personal Shopper</div>
+            </div>
+        </div>
+    </div>
+
+    <footer>&copy; 2025 My Personal Shopper</footer>
+</body>
+</html>
