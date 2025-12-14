@@ -229,42 +229,57 @@
         </div>
     </div>
 
-    <script>
-        // Simulació de la lògica de registre (MVP Javascript)
-        document.getElementById('registerForm').addEventListener('submit', function(e) {
-            e.preventDefault(); // Evita que la pàgina es recarregui de debò
+    <script type="module">
+    // Importem la base de dades
+    import { db, ref, set } from './firebase.js';
 
-            const btn = document.querySelector('.btn-submit');
-            const originalText = btn.innerText;
-            
-            // 1. Canvi visual per indicar "carregant"
-            btn.innerText = "Processant...";
-            btn.style.opacity = "0.7";
+    document.getElementById('registerForm').addEventListener('submit', function(e) {
+        e.preventDefault(); 
 
-            // 2. Recollida de dades (Simulada)
-            const dadesUsuari = {
-                nom: document.getElementById('nom').value,
-                email: document.getElementById('email').value,
-                // Aquí en un futur enviaríem això al backend (Java/Python)
-            };
+        const btn = document.querySelector('.btn-submit');
+        const originalText = btn.innerText;
+        btn.innerText = "Connectant amb el núvol...";
+        btn.style.opacity = "0.7";
 
-            // 3. Simulació de retard de xarxa (1.5 segons)
+        // Dades del formulari
+        const email = document.getElementById('email').value;
+        // Firebase no accepta punts (.) a les claus, els canviem per comas (,) o fem un ID net
+        const userId = email.replace(/\./g, ',');
+
+        const nouUsuari = {
+            nom: document.getElementById('nom').value,
+            cognoms: document.getElementById('cognoms').value,
+            nif: document.getElementById('nif').value,
+            telefon: document.getElementById('telefon').value,
+            adreca: document.getElementById('adreca').value,
+            email: email,
+            password: document.getElementById('password').value,
+            dataRegistre: new Date().toISOString(),
+            estil: {}, // Es crearà buit
+            comandes: []
+        };
+
+        // GUARDAR A FIREBASE (REALTIME DATABASE)
+        set(ref(db, 'users/' + userId), nouUsuari)
+        .then(() => {
+            // Èxit
+            // Guardem l'ID al navegador per saber qui som durant la sessió
+            localStorage.setItem('currentUserEmail', userId);
+
+            btn.innerText = originalText;
+            btn.style.opacity = "1";
+            document.getElementById('registerForm').style.display = 'none';
+            document.getElementById('feedbackMessage').style.display = 'block';
+
             setTimeout(() => {
-                // 4. Èxit
-                btn.innerText = originalText;
-                btn.style.opacity = "1";
-                document.getElementById('registerForm').style.display = 'none'; // Amaguem el formulari
-                document.getElementById('feedbackMessage').style.display = 'block'; // Mostrem missatge
-
-                // 5. Redirecció simulada al pas següent (Creació de Perfil d'Estil)
-                console.log("Usuari registrat:", dadesUsuari);
-                setTimeout(() => {
-                    window.location.href = 'perfil-estil.html';
-                    // window.location.href = 'perfil-estil.html'; 
-                }, 2000);
-
+                window.location.href = 'perfil-estil.html'; 
             }, 1500);
+        })
+        .catch((error) => {
+            alert("Error guardant al núvol: " + error.message);
+            btn.innerText = originalText;
         });
-    </script>
+    });
+</script>
 </body>
 </html>

@@ -8,14 +8,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <style>
         /* --- ESTILS BASE --- */
         :root {
-            --color-bg: #f4f4f4; /* Gris molt suau de fons */
+            --color-bg: #f4f4f4;
             --color-card: #ffffff;
             --color-text: #1a1a1a;
-            --color-accent: #D4AF37; /* Daurat */
+            --color-accent: #D4AF37;
             --color-input-border: #dddddd;
             --font-title: 'Playfair Display', serif;
             --font-body: 'Lato', sans-serif;
@@ -25,7 +26,6 @@
 
         body {
             background-color: var(--color-bg);
-            /* Imatge de fons subtil amb opacitat */
             background-image: linear-gradient(rgba(255,255,255,0.8), rgba(255,255,255,0.8)), url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
             background-size: cover;
             background-position: center;
@@ -46,8 +46,28 @@
             padding: 60px 40px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.1);
             text-align: center;
-            position: relative;
-            border-top: 5px solid var(--color-accent); /* Detall de color */
+            position: relative; /* Necessari per posicionar la icona */
+            border-top: 5px solid var(--color-accent);
+        }
+
+        /* ESTIL DE L'ACCÉS "SECRET" (TOP RIGHT) */
+        .stylist-access {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #ccc;
+            text-decoration: none;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: 0.3s;
+            padding: 5px;
+        }
+        .stylist-access:hover { 
+            color: var(--color-accent); 
+            background-color: #f9f9f9;
+            border-radius: 4px;
         }
 
         .login-header h1 {
@@ -151,6 +171,11 @@
 <body>
 
     <div class="login-card">
+        <a href="login-shopper.html" class="stylist-access" title="Accés Personal Shopper">
+            <span class="material-icons" style="font-size: 18px;">work_outline</span>
+            <span style="font-size: 0.7rem; text-transform: uppercase;">Staff</span>
+        </a>
+
         <div class="login-header">
             <h1>Benvinguda</h1>
             <p>Accedeix al teu espai personal d'estil.</p>
@@ -184,47 +209,50 @@
         </div>
     </div>
 
-    <script>
+    <script type="module">
+        import { db, ref, get, child } from './firebase.js';
+
         document.getElementById('loginForm').addEventListener('submit', function(e) {
             e.preventDefault();
 
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
+            const userId = email.replace(/\./g, ','); // Mateixa transformació que al registre
+            
             const btn = document.querySelector('.btn-login');
             const errorMsg = document.getElementById('errorMsg');
 
-            // 1. Reset visual
             errorMsg.style.display = 'none';
-            const originalText = btn.innerText;
-            btn.innerText = "Verificant...";
-            btn.style.opacity = "0.7";
+            btn.innerText = "Verificant al servidor...";
 
-            // 2. Simulació de validació (Backend simulat)
-            setTimeout(() => {
-                // Simulem una validació bàsica
-                if (email && password.length >= 4) {
-                    // ÈXIT
-                    btn.innerText = "Accedint...";
-                    btn.style.backgroundColor = "#2f855a"; // Verd èxit momentani
+            const dbRef = ref(db);
+            
+            // BUSCAR USUARI A FIREBASE
+            get(child(dbRef, `users/${userId}`)).then((snapshot) => {
+                if (snapshot.exists()) {
+                    const userObj = snapshot.val();
                     
-                    setTimeout(() => {
-                        // Aquí redirigim al "Dashboard" o "Wireframe 2"
-                        window.location.href = 'dashboard-client.html';
-                        // window.location.href = 'dashboard.html';
-                    }, 1000);
+                    // Comprovar contrasenya
+                    if (userObj.password === password) {
+                        // Login OK
+                        localStorage.setItem('currentUserEmail', userId); // Guardem sessió
+                        
+                        btn.innerText = "Accedint...";
+                        btn.style.backgroundColor = "#2f855a";
+                        setTimeout(() => {
+                            window.location.href = 'dashboard-client.html';
+                        }, 1000);
+                    } else {
+                        throw new Error("Contrasenya incorrecta");
+                    }
                 } else {
-                    // ERROR
-                    btn.innerText = originalText;
-                    btn.style.opacity = "1";
-                    errorMsg.style.display = 'block';
-                    // Petit efecte de vibració (opcional visual)
-                    document.querySelector('.login-card').animate([
-                        { transform: 'translateX(-5px)' },
-                        { transform: 'translateX(5px)' },
-                        { transform: 'translateX(0)' }
-                    ], { duration: 300 });
+                    throw new Error("Usuari no trobat");
                 }
-            }, 1500);
+            }).catch((error) => {
+                btn.innerText = "Entrar";
+                errorMsg.innerText = "Error: " + error.message;
+                errorMsg.style.display = 'block';
+            });
         });
     </script>
 </body>

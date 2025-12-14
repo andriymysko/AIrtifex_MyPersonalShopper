@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FAQ | My Personal Shopper</title>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&family=Playfair+Display:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --accent: #D4AF37; }
+        body { font-family: 'Lato', sans-serif; margin: 0; color: #333; }
+        header { padding: 20px 5%; border-bottom: 1px solid #eee; display:flex; justify-content:space-between; align-items:center;}
+        .logo { font-family: 'Playfair Display', serif; font-weight: 700; text-decoration:none; color:black;}
+        
+        .container { max-width: 800px; margin: 60px auto; padding: 0 20px; }
+        h1 { font-family: 'Playfair Display', serif; text-align: center; font-size: 2.5rem; margin-bottom: 50px; }
+
+        .faq-item { border-bottom: 1px solid #eee; padding: 20px 0; }
+        .question { font-weight: 700; font-size: 1.1rem; cursor: pointer; display: flex; justify-content: space-between; }
+        .question:hover { color: var(--accent); }
+        .answer { margin-top: 10px; color: #666; display: none; line-height: 1.6; }
+        .faq-item.active .answer { display: block; animation: fadeIn 0.3s; }
+        
+        @keyframes fadeIn { from{opacity:0;} to{opacity:1;} }
+        footer { text-align: center; padding: 40px; background: #f9f9f9; margin-top: 60px; }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="index.html" class="logo">MY PERSONAL SHOPPER</a>
+        <a href="index.html" style="text-decoration:none; color:#666;">Tornar</a>
+    </header>
+
+    <div class="container">
+        <h1>Preguntes Freqüents</h1>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleFaq(this)">Quan costa el servei? <span>+</span></div>
+            <div class="answer">El servei d'assessorament té un cost de 10€. Aquest import es descompta si et quedes almenys una peça de la caixa. L'enviament i la devolució són gratuïts.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleFaq(this)">Què passa si no m'agrada res? <span>+</span></div>
+            <div class="answer">Cap problema! Pots retornar les 5 peces gratuïtament. En aquest cas, només pagaràs els 10€ del servei de Personal Shopper pel temps dedicat a la selecció.</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleFaq(this)">Com funciona el pagament? <span>+</span></div>
+            <div class="answer">Quan fas la comanda, autoritzes el pagament. Primer cobrem els 10€ de servei. Quan decideixis què et quedes, cobrem la resta de peces (menys els 10€ si te'n quedes alguna).</div>
+        </div>
+
+        <div class="faq-item">
+            <div class="question" onclick="toggleFaq(this)">Puc triar jo la roba? <span>+</span></div>
+            <div class="answer">No directament. La màgia és que la teva Personal Shopper triï per tu basant-se en el teu perfil. Però pots deixar notes específiques (ex: "Necessito un vestit per un casament").</div>
+        </div>
+    </div>
+
+    <footer>&copy; 2025 My Personal Shopper</footer>
+
+    <script>
+        function toggleFaq(element) {
+            element.parentElement.classList.toggle('active');
+            const span = element.querySelector('span');
+            span.innerText = span.innerText === '+' ? '-' : '+';
+        }
+    </script>
+</body>
+</html>
