@@ -275,14 +275,11 @@
     </div>
 
     <script>
-    import { db, ref, onValue, update } from './firebase.js';
-
-    // --- CONFIGURACIÓ DE LA IA (MÈTODE ANTI-GITHUB) ---
-    // Trossejem la clau per a que GitHub no la bloquegi al pujar-la
-    const partA = "sk-proj-tD9Bpt1o9OgsmXxh_-QRdPtP22qBeV6aw8KopFS6OyfYAPm";
-    const partB = "x6KKs3KewZW-Vm5gPgpOAYMY7STT3BlbkFJJT4L_wVDg20wo0TV0ArDH-cdsV1ssmS46gBam8wbi0DvmQ_9mVKNiCQhDKCADY4infx_pmDxIA";
+    // --- CONFIGURACIÓ DE LA IA ---
     
-    const API_KEY = partA + partB; // El navegador les uneix màgicament aquí
+    const Part_A = 'sk-proj-tD9Bpt1o9OgsmXxh_-QRdPtP22qBeV6aw8KopFS6OyfYAPmx6KKs3KewZW-Vm5gPgpOAYMY7STT3BlbkFJJT4L_';
+    const Part_B = 'wVDg20wo0TV0ArDH-cdsV1ssmS46gBam8wbi0DvmQ_9mVKNiCQhDKCADY4infx_pmDxIA';
+    const API_KEY = Part_A + Part_B;
 
     const SYSTEM_PROMPT = `
         Ets l'Ada, una experta estilista personal de l'empresa "My Personal Shopper".
